@@ -1,0 +1,7 @@
+<h2>All tasks</h2>
+<section>
+{{#each model as |task|}}
+  <div>{{task.title}}</div>
+{{/each}}
+</section>
+{{#link-to "tasks.new"}}New task{{/link-to}}
