@@ -5,7 +5,7 @@ export const useMoneybird = () => {
   const [APIToken, setAPIToken] = useContext(APITokenContext);
 
   return {
-    isLoggedIn: APIToken !== undefined,
+    isLoggedIn: APIToken !== null,
     fetch: (resource: string, init?: RequestInit) =>
       APIToken
         ? fetch(`/moneybird-proxy/v2/${resource}`, {
