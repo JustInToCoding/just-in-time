@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '^/moneybird-proxy/.*': {
+      '^/api/moneybird/.*': {
         target: 'https://moneybird.com/api/',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/moneybird-proxy/, ''),
