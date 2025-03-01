@@ -1,9 +1,16 @@
 export default async function handler(req, res) {
   const MONEYBIRD_API_URL = 'https://moneybird.com/api/';
 
-  // Capture the full path after /api/proxy/
-  const { proxyPath = [] } = req.query;
-  const targetUrl = `${MONEYBIRD_API_URL}${proxyPath.join('/')}`; // Join array into URL
+  // Extract everything after "/api/proxy/"
+  const proxyPath = req.url.replace('/api/proxy/', '').replace(/\/$/, ''); // Trim trailing slash
+
+  // If there's no path, return an error
+  if (!proxyPath || proxyPath === 'proxy') {
+    return res.status(400).json({ error: 'No API path provided' });
+  }
+
+  // Construct the target URL
+  const targetUrl = `${MONEYBIRD_API_URL}${proxyPath}`;
 
   try {
     // Forward headers (ensure API key is included)

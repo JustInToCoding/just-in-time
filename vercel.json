@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/moneybird/:path*",
-      "destination": "/api/moneybird/[...proxyPath]"
+      "destination": "/api/moneybird"
     }
   ]
 }
