@@ -3,6 +3,7 @@
     {
       "source": "/api/moneybird-proxy/:path*",
       "destination": "https://moneybird.com/api/:path*"
-    }
+    },
+    { "source": "/((?!api\/.*).*)", "destination": "/index.html" }
   ]
 }
