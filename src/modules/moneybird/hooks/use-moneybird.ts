@@ -8,14 +8,14 @@ export const useMoneybird = () => {
     isLoggedIn: APIToken !== null,
     fetch: (resource: string, init?: RequestInit) =>
       APIToken
-        ? fetch(`/moneybird-proxy/v2/${resource}`, {
+        ? fetch(`/api/moneybird-proxy/v2/${resource}`, {
             headers: [['Authorization', `Bearer ${APIToken}`]],
             ...init,
           })
         : Promise.reject(new Error('API Token was not set.')),
     validateAPIToken: async (token: string) => {
       try {
-        const result = await fetch(`/moneybird-proxy/v2/administrations`, {
+        const result = await fetch(`/api/moneybird-proxy/v2/administrations`, {
           headers: [['Authorization', `Bearer ${token}`]],
         });
         console.log(result);
