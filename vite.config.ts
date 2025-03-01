@@ -10,7 +10,7 @@ export default defineConfig({
       '^/api/moneybird/.*': {
         target: 'https://moneybird.com/api/',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/moneybird-proxy/, ''),
+        rewrite: (path) => path.replace(/^\/api\/moneybird/, ''),
       },
     },
   },
