@@ -10,6 +10,7 @@ import { Layout } from './routes/layout';
 import { Login } from './routes/login';
 import { Projects } from './routes/projects';
 import { TimeEntries } from './routes/time-entries';
+import { TimeLogger } from './routes/time-logger';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -26,6 +27,7 @@ createRoot(document.getElementById('root')!).render(
               }
             >
               <Route index element={<Home />} />
+              <Route path="time-logger" element={<TimeLogger />} />
               <Route path="time-entries" element={<TimeEntries />} />
               <Route path="projects" element={<Projects />} />
             </Route>
