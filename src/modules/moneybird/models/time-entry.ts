@@ -1,5 +1,5 @@
 import { Event } from './event';
-import { Project } from './Project';
+import { Project } from './project';
 
 interface Contact {
   id: string;
