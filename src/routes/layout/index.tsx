@@ -9,12 +9,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ActionIcon, AppShell, Burger, NavLink } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { NavLink as Link, Outlet } from 'react-router';
-import { useMoneybird } from '../../modules/moneybird';
+import { useAuth } from '../../modules/moneybird';
 import styles from './styles.module.scss';
 
 export const Layout = () => {
   const [opened, { toggle }] = useDisclosure();
-  const { logOut } = useMoneybird();
+  const { logOut } = useAuth();
 
   return (
     <AppShell
