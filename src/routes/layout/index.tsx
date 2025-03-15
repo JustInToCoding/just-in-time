@@ -1,4 +1,5 @@
 import {
+  faArrowRightArrowLeft,
   faHome,
   faRightFromBracket,
   faStopwatch,
@@ -6,11 +7,10 @@ import {
   faUserClock,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ActionIcon, AppShell, Burger, NavLink } from '@mantine/core';
+import { AppShell, Burger, Code, Divider, Group, NavLink, ScrollArea, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { NavLink as Link, Outlet } from 'react-router';
 import { useAuth } from '../../modules/moneybird';
-import styles from './styles.module.scss';
 
 export const Layout = () => {
   const [opened, { toggle }] = useDisclosure();
@@ -18,51 +18,65 @@ export const Layout = () => {
 
   return (
     <AppShell
-      header={{ height: 40 }}
+      header={{ height: 60 }}
       navbar={{
         width: 300,
         breakpoint: 'sm',
-        collapsed: { mobile: !opened },
+        collapsed: { mobile: !opened, desktop: !opened },
       }}
       padding="md"
     >
       <AppShell.Header>
-        <div className={styles.burger}>
-          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-        </div>
-        <div className={styles.spacer} />
-        <div className={styles.logout}>
-          <ActionIcon variant="filled" aria-label="Logout" onClick={logOut}>
-            <FontAwesomeIcon icon={faRightFromBracket} />
-          </ActionIcon>
-        </div>
+        <Group h="100%" px="md">
+          <Group>
+            <Burger opened={opened} onClick={toggle} size="sm" />
+            <Text>Just In Time</Text>
+            <Code fw={700}>v{__APP_VERSION__}</Code>
+          </Group>
+        </Group>
       </AppShell.Header>
 
       <AppShell.Navbar p="md">
-        <NavLink
-          label="Home"
-          leftSection={<FontAwesomeIcon icon={faHome} />}
-          component={Link}
-          to="/"
-        />
-        <NavLink
-          label="Time Logger"
-          leftSection={<FontAwesomeIcon icon={faStopwatch} />}
-          component={Link}
-          to="/time-logger"
-        />
-        <NavLink
-          label="Time Entries"
-          leftSection={<FontAwesomeIcon icon={faUserClock} />}
-          component={Link}
-          to="/time-entries"
-        />
-        <NavLink
-          label="Projects"
-          leftSection={<FontAwesomeIcon icon={faTag} />}
-          component={Link}
-          to="/projects"
-        />
+        <AppShell.Section grow my="md" component={ScrollArea}>
+          <NavLink
+            label="Home"
+            leftSection={<FontAwesomeIcon icon={faHome} />}
+            component={Link}
+            to="/"
+          />
+          <NavLink
+            label="Time Logger"
+            leftSection={<FontAwesomeIcon icon={faStopwatch} />}
+            component={Link}
+            to="/time-logger"
+          />
+          <NavLink
+            label="Time Entries"
+            leftSection={<FontAwesomeIcon icon={faUserClock} />}
+            component={Link}
+            to="/time-entries"
+          />
+          <NavLink
+            label="Projects"
+            leftSection={<FontAwesomeIcon icon={faTag} />}
+            component={Link}
+            to="/projects"
+          />
+        </AppShell.Section>
+        <AppShell.Section>
+          <Divider my="md" />
+          <NavLink
+            label="Change administration"
+            leftSection={<FontAwesomeIcon icon={faArrowRightArrowLeft} />}
+            component={Link}
+            to="/setup/administration"
+          />
+          <NavLink
+            label="Logout"
+            leftSection={<FontAwesomeIcon icon={faRightFromBracket} />}
+            onClick={logOut}
+          />
+        </AppShell.Section>
       </AppShell.Navbar>
 
       <AppShell.Main>

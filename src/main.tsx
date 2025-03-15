@@ -20,13 +20,17 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: 1,
+      staleTime: Infinity,
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
     },
   },
 });
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <MantineProvider>
+    <MantineProvider defaultColorScheme="dark">
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools />
         <APITokenProvider>
