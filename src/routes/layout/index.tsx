@@ -1,3 +1,4 @@
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import {
   faArrowRightArrowLeft,
   faHome,
@@ -65,6 +66,12 @@ export const Layout = () => {
         </AppShell.Section>
         <AppShell.Section>
           <Divider my="md" />
+          <NavLink
+            label="GitHub repository"
+            leftSection={<FontAwesomeIcon icon={faGithub} />}
+            href="https://github.com/JustInToCoding/just-in-time"
+            target="_blank"
+          />
           <NavLink
             label="Change administration"
             leftSection={<FontAwesomeIcon icon={faArrowRightArrowLeft} />}

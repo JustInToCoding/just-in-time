@@ -3,6 +3,7 @@ import { useProjects } from '../../modules/moneybird/query-hooks/use-projects';
 
 export const Projects = () => {
   const { query } = useProjects('state:all');
+  // const { query: timeEntriesQuery } = useTimeEntries({filter: 'all', enabled: query.data?.});
 
   if (query.isPending) {
     return <span>Loading...</span>;
@@ -14,7 +15,7 @@ export const Projects = () => {
 
   return (
     <div>
-      <Table>
+      <Table highlightOnHover striped>
         <Table.Thead>
           <Table.Tr>
             <Table.Th>Project name</Table.Th>
