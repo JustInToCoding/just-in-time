@@ -1,0 +1,65 @@
+.day,
+.prevweek,
+.nextweek,
+.weektotal,
+.today {
+  border: 0.5px solid #969696;
+
+  &.selected {
+    background-color: #007bff;
+    color: white;
+
+    &:hover {
+      background-color: #0056b3;
+    }
+  }
+
+  &.unselected {
+    background-color: #313131;
+    color: #d0d0d0;
+
+    &:hover {
+      background-color: #777777;
+      color: #ffffff;
+      cursor: pointer;
+    }
+  }
+}
+
+.prevweek {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+
+  &:hover {
+    background-color: #777777;
+    color: #ffffff;
+    cursor: pointer;
+  }
+}
+
+.nextweek {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+
+  &:hover {
+    background-color: #777777;
+    color: #ffffff;
+    cursor: pointer;
+  }
+}
+
+.weektotal,
+.today {
+  border-radius: 5px;
+}
+
+.today {
+  background-color: #313131;
+  color: #d0d0d0;
+
+  &:hover {
+    background-color: #777777;
+    color: #ffffff;
+    cursor: pointer;
+  }
+}

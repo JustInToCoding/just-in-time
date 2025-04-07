@@ -23,3 +23,25 @@ export const getTimeEntries = (
     true,
   ).then((response) => response.json());
 };
+
+export const postTimeEntry = (
+  fetcher: (input: string, useAdministration: boolean, ...args: any[]) => Promise<Response>,
+  timeEntry: Omit<
+    TimeEntry,
+    | 'user'
+    | 'project'
+    | 'events'
+    | 'notes'
+    | 'created_at'
+    | 'updated_at'
+    | 'id'
+    | 'administration_id'
+    | 'contact'
+    | 'detail'
+  >,
+): Promise<TimeEntry> => {
+  return fetcher('time_entries', true, {
+    method: 'POST',
+    body: JSON.stringify({ time_entry: timeEntry }),
+  }).then((response) => response.json());
+};

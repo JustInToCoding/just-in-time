@@ -39,8 +39,8 @@ export const TimeEntryTable: FC<{ timeEntries: TimeEntry[]; perPage?: number }> 
             <Table.Th>Description</Table.Th>
             <Table.Th>Date</Table.Th>
             <Table.Th>Period</Table.Th>
-            <Table.Th>Hours</Table.Th>
             <Table.Th>Paused</Table.Th>
+            <Table.Th>Worked</Table.Th>
             <Table.Th>User</Table.Th>
             <Table.Th>Status</Table.Th>
           </Table.Tr>
@@ -57,10 +57,14 @@ export const TimeEntryTable: FC<{ timeEntries: TimeEntry[]; perPage?: number }> 
                 {dayjs(timeEntry.ended_at).format('HH:mm')}
               </Table.Td>
               <Table.Td>
-                {getDuration(timeEntry.started_at, timeEntry.ended_at, timeEntry.paused_duration)}
+                {dayjs.duration(timeEntry.paused_duration || 0, 'seconds').format('HH:mm')}
               </Table.Td>
               <Table.Td>
-                {dayjs.duration(timeEntry.paused_duration, 'seconds').format('HH:mm')}
+                {getDuration(
+                  timeEntry.started_at,
+                  timeEntry.ended_at,
+                  timeEntry.paused_duration || 0,
+                )}
               </Table.Td>
               <Table.Td>{timeEntry.user?.name}</Table.Td>
               <Table.Td>
@@ -76,7 +80,7 @@ export const TimeEntryTable: FC<{ timeEntries: TimeEntry[]; perPage?: number }> 
           ))}
         </Table.Tbody>
       </Table>
-      <Pagination total={data.length} value={activePage} onChange={setPage} />
+      {data.length > 1 && <Pagination total={data.length} value={activePage} onChange={setPage} />}
     </div>
   );
 };

@@ -1,8 +1,9 @@
 import { useContext } from 'react';
-import { APITokenContext } from '../context/api-token-context';
+import { APISettingsContext } from '../context/api-settings-context';
 
 export const useAuth = () => {
-  const { APIToken, setAPIToken, administration, setAdministration } = useContext(APITokenContext);
+  const { APIToken, setAPIToken, administration, setAdministration } =
+    useContext(APISettingsContext);
 
   return {
     isLoggedIn: APIToken !== null,
@@ -11,7 +12,10 @@ export const useAuth = () => {
         ? fetch(
             `/api/moneybird-proxy/v2/${useAdministration && administration !== null ? administration + '/' : ''}${resource}`,
             {
-              headers: [['Authorization', `Bearer ${APIToken}`]],
+              headers: [
+                ['Authorization', `Bearer ${APIToken}`],
+                ['Content-Type', 'application/json'],
+              ],
               ...init,
             },
           )

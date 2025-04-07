@@ -20,11 +20,11 @@ export interface TimeEntry {
   administration_id: number;
   contact_id: string | null;
   project_id: string | null;
-  user_id: number;
+  user_id: string;
   started_at: string;
   ended_at: string;
   description: string;
-  paused_duration: number;
+  paused_duration: number | null;
   billable: boolean;
   created_at: string;
   updated_at: string;
