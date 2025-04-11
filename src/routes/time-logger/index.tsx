@@ -238,7 +238,7 @@ export const TimeLogger = () => {
         ) : query.isError ? (
           <span>Error: {query.error.message}</span>
         ) : (
-          <TimeEntryTable timeEntries={timeEntriesForDate} hideProject hideContact hideDate />
+          <TimeEntryTable timeEntries={timeEntriesForDate} hideDate />
         )}
       </Paper>
     </Box>
