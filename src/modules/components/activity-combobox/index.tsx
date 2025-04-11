@@ -110,7 +110,9 @@ export const ActivityCombobox: FC<{
             </Combobox.Option>
           ))}
           {!exactOptionMatch && search.trim().length > 0 && (
-            <Combobox.Option value="$create">+ Create &quot;{search}&quot;</Combobox.Option>
+            <Combobox.Option value="$create">
+              + Create activity &quot;{search}&quot;
+            </Combobox.Option>
           )}
         </Combobox.Options>
       </Combobox.Dropdown>

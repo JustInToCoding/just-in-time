@@ -18,9 +18,18 @@ const chunk = <T,>(array: T[], size: number): T[][] => {
   return [head, ...chunk(tail, size)];
 };
 
-export const TimeEntryTable: FC<{ timeEntries: TimeEntry[]; perPage?: number }> = ({
+export const TimeEntryTable: FC<{
+  timeEntries: TimeEntry[];
+  perPage?: number;
+  hideProject?: boolean;
+  hideContact?: boolean;
+  hideDate?: boolean;
+}> = ({
   timeEntries = [],
   perPage = 15,
+  hideProject = false,
+  hideContact = false,
+  hideDate = false,
 }) => {
   const [activePage, setPage] = useState(1);
   const data = useMemo(() => chunk(timeEntries, perPage), [timeEntries, perPage]);
@@ -34,10 +43,10 @@ export const TimeEntryTable: FC<{ timeEntries: TimeEntry[]; perPage?: number }> 
       <Table>
         <Table.Thead>
           <Table.Tr>
-            <Table.Th>Project</Table.Th>
-            <Table.Th>Contact</Table.Th>
+            {!hideProject && <Table.Th>Project</Table.Th>}
+            {!hideContact && <Table.Th>Contact</Table.Th>}
             <Table.Th>Description</Table.Th>
-            <Table.Th>Date</Table.Th>
+            {!hideDate && <Table.Th>Date</Table.Th>}
             <Table.Th>Period</Table.Th>
             <Table.Th>Paused</Table.Th>
             <Table.Th>Worked</Table.Th>
@@ -48,10 +57,10 @@ export const TimeEntryTable: FC<{ timeEntries: TimeEntry[]; perPage?: number }> 
         <Table.Tbody>
           {data[activePage - 1].map((timeEntry) => (
             <Table.Tr key={timeEntry.id}>
-              <Table.Td>{timeEntry.project?.name}</Table.Td>
-              <Table.Td>{timeEntry.contact?.company_name}</Table.Td>
+              {!hideProject && <Table.Td>{timeEntry.project?.name}</Table.Td>}
+              {!hideContact && <Table.Td>{timeEntry.contact?.company_name}</Table.Td>}
               <Table.Td>{timeEntry.description}</Table.Td>
-              <Table.Td>{dayjs(timeEntry.started_at).format('DD-MM-YYYY')}</Table.Td>
+              {!hideDate && <Table.Td>{dayjs(timeEntry.started_at).format('DD-MM-YYYY')}</Table.Td>}
               <Table.Td>
                 {dayjs(timeEntry.started_at).format('HH:mm')} -{' '}
                 {dayjs(timeEntry.ended_at).format('HH:mm')}
