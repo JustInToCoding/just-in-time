@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Center, Container, ContainerProps, Grid, Stack, Text, Title } from '@mantine/core';
 import dayjs from 'dayjs';
 import { FC, useMemo } from 'react';
+import { WeekPicker } from '../week-picker';
 import styles from './styles.module.scss';
 
 export const DayInWeekPicker: FC<
@@ -31,12 +32,29 @@ export const DayInWeekPicker: FC<
 
   return (
     <Container pl={8} pr={8} fluid {...rest}>
-      <Grid columns={24}>
+      <Grid columns={24} gutter="md">
         <Grid.Col span="auto">
           <Title order={2}>{dayjs(date).format('D MMMM YYYY')}</Title>
         </Grid.Col>
-        <Grid.Col span="content" className={styles.today}>
-          <Center h="100%" onClick={() => onChange(dayjs().toDate())}>
+        <Grid.Col span={2}>
+          <WeekPicker
+            value={date}
+            onChange={onChange}
+            p={0}
+            h="100%"
+            w="100%"
+            variant="transparent"
+            className={styles.action}
+          />
+        </Grid.Col>
+        <Grid.Col span={2}>
+          <Center
+            w="100%"
+            h="100%"
+            p={8}
+            onClick={() => onChange(dayjs().toDate())}
+            className={styles.action}
+          >
             Today
           </Center>
         </Grid.Col>
