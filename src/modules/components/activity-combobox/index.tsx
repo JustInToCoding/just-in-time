@@ -1,5 +1,5 @@
 import { Combobox, InputBase, useCombobox } from '@mantine/core';
-import { FC, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { useActivities } from '../../just-in-time/query-hooks/use-activities';
 
 export const ActivityCombobox: FC<{
@@ -44,6 +44,12 @@ export const ActivityCombobox: FC<{
     [exactOptionMatch, query.data, search],
   );
 
+  useEffect(() => {
+    console.log('onChange called');
+    onChange('');
+    setSearch('');
+  }, [projectId]);
+
   return (
     <Combobox
       store={combobox}
@@ -83,7 +89,7 @@ export const ActivityCombobox: FC<{
             setSearch(value || '');
             onBlur(event);
           }}
-          placeholder="Search activity"
+          placeholder={!projectId ? 'Select project first... ' : 'Search activity'}
           rightSectionPointerEvents="none"
           w="100%"
           required={required}
