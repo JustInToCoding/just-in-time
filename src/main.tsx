@@ -15,6 +15,7 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
 import { ProtectedRoute } from './components/protected-route';
 import { APISettingsProvider } from './modules/moneybird';
+import { Activities } from './routes/activities';
 import { Layout } from './routes/layout';
 import { Projects } from './routes/projects';
 import { Setup } from './routes/setup';
@@ -68,6 +69,7 @@ createRoot(document.getElementById('root')!).render(
                 <Route path="time-logger" element={<TimeLogger />} />
                 <Route path="time-entries" element={<TimeEntries />} />
                 <Route path="projects" element={<Projects />} />
+                <Route path="activities" element={<Activities />} />
               </Route>
             </Routes>
           </BrowserRouter>

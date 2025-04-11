@@ -1,9 +1,10 @@
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import {
   faArrowRightArrowLeft,
+  faFire,
   faRightFromBracket,
+  faSitemap,
   faStopwatch,
-  faTag,
   faUserClock,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -82,9 +83,15 @@ export const Layout = () => {
           />
           <NavLink
             label="Projects"
-            leftSection={<FontAwesomeIcon icon={faTag} />}
+            leftSection={<FontAwesomeIcon icon={faSitemap} />}
             component={Link}
             to="/projects"
+          />
+          <NavLink
+            label="Activities"
+            leftSection={<FontAwesomeIcon icon={faFire} />}
+            component={Link}
+            to="/activities"
           />
         </AppShell.Section>
         <AppShell.Section>

@@ -38,6 +38,7 @@ export const TimeEntries = () => {
           value: project.id,
           label: project.name,
         }))}
+        value={projectId}
         onChange={setProjectId}
         clearable
         mt="xs"

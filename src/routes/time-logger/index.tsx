@@ -1,6 +1,6 @@
 import { faCheck, faClock, faClose } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box, Button, Card, Checkbox, Grid, Paper, Select, Stack, TextInput } from '@mantine/core';
+import { Box, Button, Card, Checkbox, Grid, Paper, Select, Stack } from '@mantine/core';
 import { TimeInput } from '@mantine/dates';
 import { isNotEmpty, useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
@@ -8,6 +8,7 @@ import dayjs from 'dayjs';
 import { useMemo, useState } from 'react';
 import { DayInWeekPicker } from '../../components/day-in-week-picker';
 import { TimeEntryTable } from '../../components/time-entry-table';
+import { ActivityCombobox } from '../../modules/components/activity-combobox';
 import { TimeEntry } from '../../modules/moneybird/models/time-entry';
 import { useContacts } from '../../modules/moneybird/query-hooks/use-contacts';
 import { useProjects } from '../../modules/moneybird/query-hooks/use-projects';
@@ -41,7 +42,7 @@ export const TimeLogger = () => {
   });
 
   const form = useForm<FormReturnType>({
-    mode: 'uncontrolled',
+    mode: 'controlled',
     initialValues: {
       started_at: dayjs().subtract(1, 'hour').format('HH:mm'),
       ended_at: dayjs().format('HH:mm'),
@@ -146,40 +147,6 @@ export const TimeLogger = () => {
       <Card mt="lg">
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <Grid columns={24}>
-            <Grid.Col span={3}>
-              <TimeInput
-                label="Start time"
-                key={form.key('started_at')}
-                {...form.getInputProps('started_at')}
-                leftSection={<FontAwesomeIcon icon={faClock} />}
-              />
-            </Grid.Col>
-            <Grid.Col span={3}>
-              <TimeInput
-                label="End time"
-                key={form.key('ended_at')}
-                {...form.getInputProps('ended_at')}
-                leftSection={<FontAwesomeIcon icon={faClock} />}
-              />
-            </Grid.Col>
-            <Grid.Col span={3}>
-              <TimeInput
-                label="Paused"
-                key={form.key('paused_duration')}
-                {...form.getInputProps('paused_duration')}
-                leftSection={<FontAwesomeIcon icon={faClock} />}
-              />
-            </Grid.Col>
-            <Grid.Col span="auto">
-              <TextInput
-                label="Description"
-                placeholder="Description"
-                key={form.key('description')}
-                {...form.getInputProps('description')}
-              />
-            </Grid.Col>
-          </Grid>
-          <Grid mt="xs">
             <Grid.Col span="auto">
               <Select
                 label="Select project"
@@ -189,6 +156,7 @@ export const TimeLogger = () => {
                   value: project.id,
                   label: project.name,
                 }))}
+                required
                 key={form.key('project_id')}
                 {...form.getInputProps('project_id')}
               />
@@ -205,6 +173,45 @@ export const TimeLogger = () => {
                 key={form.key('contact_id')}
                 {...form.getInputProps('contact_id')}
               />
+            </Grid.Col>
+          </Grid>
+          <Grid mt="xs" columns={24}>
+            <Grid.Col span={3}>
+              <TimeInput
+                label="Start time"
+                key={form.key('started_at')}
+                required
+                {...form.getInputProps('started_at')}
+                leftSection={<FontAwesomeIcon icon={faClock} />}
+              />
+            </Grid.Col>
+            <Grid.Col span={3}>
+              <TimeInput
+                label="End time"
+                key={form.key('ended_at')}
+                required
+                {...form.getInputProps('ended_at')}
+                leftSection={<FontAwesomeIcon icon={faClock} />}
+              />
+            </Grid.Col>
+            <Grid.Col span={3}>
+              <TimeInput
+                label="Paused"
+                key={form.key('paused_duration')}
+                {...form.getInputProps('paused_duration')}
+                leftSection={<FontAwesomeIcon icon={faClock} />}
+              />
+            </Grid.Col>
+            <Grid.Col span="auto">
+              <Stack justify="flex-end" w="100%" h="100%">
+                <ActivityCombobox
+                  required
+                  label="Description"
+                  projectId={form.getInputProps('project_id').value}
+                  key={form.key('description')}
+                  {...form.getInputProps('description')}
+                />
+              </Stack>
             </Grid.Col>
             <Grid.Col span="content">
               <Stack justify="flex-end" align="center" h="100%">
