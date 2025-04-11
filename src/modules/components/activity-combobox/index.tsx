@@ -89,7 +89,7 @@ export const ActivityCombobox: FC<{
             setSearch(value || '');
             onBlur(event);
           }}
-          placeholder={!projectId ? 'Select project first... ' : 'Search activity'}
+          placeholder={!projectId ? 'Disabled: select project first! ' : 'Search activity'}
           rightSectionPointerEvents="none"
           w="100%"
           required={required}

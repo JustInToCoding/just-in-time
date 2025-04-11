@@ -10,6 +10,7 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import duration from 'dayjs/plugin/duration';
 import updateLocale from 'dayjs/plugin/updateLocale';
 import weekday from 'dayjs/plugin/weekday';
+import weekOfYear from 'dayjs/plugin/weekOfYear';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
@@ -28,6 +29,7 @@ dayjs.extend(customParseFormat);
 dayjs.extend(duration);
 dayjs.extend(weekday);
 dayjs.extend(updateLocale);
+dayjs.extend(weekOfYear);
 dayjs.updateLocale('en', {
   weekStart: 1,
 });

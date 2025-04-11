@@ -137,10 +137,32 @@ export const TimeLogger = () => {
     }, tmp);
   }, [query.data]);
 
+  // Calculates an object with the duration worked the week for every project.
+  // Key = project name and value = duration worked.
+  const durationWorkedInWeek = useMemo(() => {
+    if (!query.data) return {};
+
+    return query.data.reduce(
+      (acc, entry) => {
+        const projectName = entry.project?.name || 'undefined';
+        const durationWorked = dayjs.duration(
+          dayjs(entry.ended_at)
+            .subtract(entry.paused_duration || 0, 'seconds')
+            .diff(entry.started_at, 'minutes'),
+          'minutes',
+        );
+        acc[projectName] = acc[projectName] ? acc[projectName].add(durationWorked) : durationWorked;
+        return acc;
+      },
+      {} as Record<string, plugin.Duration>,
+    );
+  }, [query.data]);
+
   return (
     <Box>
       <DayInWeekPicker
         durationWorkedInWeekdays={durationWorkedInWeekdays}
+        durationWorkedInWeek={durationWorkedInWeek}
         date={date}
         onChange={setDate}
       />

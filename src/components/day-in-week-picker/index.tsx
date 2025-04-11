@@ -1,10 +1,27 @@
 import { faAngleDoubleLeft, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Center, Container, ContainerProps, Grid, Stack, Text, Title } from '@mantine/core';
+import {
+  Center,
+  Container,
+  ContainerProps,
+  Grid,
+  Group,
+  Popover,
+  Stack,
+  Text,
+  Title,
+} from '@mantine/core';
 import dayjs from 'dayjs';
 import { FC, useMemo } from 'react';
 import { WeekPicker } from '../week-picker';
 import styles from './styles.module.scss';
+
+const formatAsHoursAndMinutes = (duration: plugin.Duration) => {
+  const totalMinutes = duration.asMinutes();
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+};
 
 export const DayInWeekPicker: FC<
   {
@@ -17,18 +34,21 @@ export const DayInWeekPicker: FC<
       5: plugin.Duration;
       6: plugin.Duration;
     };
+    durationWorkedInWeek: Record<string, plugin.Duration>;
     date: Date;
     onChange: (date: Date) => void;
   } & Omit<ContainerProps, 'onChange'>
-> = ({ durationWorkedInWeekdays, date, onChange = () => {}, ...rest }) => {
+> = ({ durationWorkedInWeekdays, durationWorkedInWeek, date, onChange = () => {}, ...rest }) => {
   const startOfWeek = useMemo(() => dayjs(date).startOf('week'), [date]);
-  const weekTotal = useMemo(
-    () =>
-      Object.values(durationWorkedInWeekdays)
-        .reduce((acc, value) => acc.add(value), dayjs.duration(0, 'minutes'))
-        .format('HH:mm'),
-    [durationWorkedInWeekdays],
-  );
+  const weekTotal = useMemo(() => {
+    const totalMinutes = Object.values(durationWorkedInWeekdays).reduce(
+      (acc, value) => acc + value.asMinutes(),
+      0,
+    );
+    const totalHours = Math.floor(totalMinutes / 60);
+    const remainingMinutes = totalMinutes % 60;
+    return `${totalHours.toString().padStart(2, '0')}:${remainingMinutes.toString().padStart(2, '0')}`;
+  }, [durationWorkedInWeekdays]);
 
   return (
     <Container pl={8} pr={8} fluid {...rest}>
@@ -98,15 +118,29 @@ export const DayInWeekPicker: FC<
             <FontAwesomeIcon icon={faAngleDoubleRight} />
           </Center>
         </Grid.Col>
-        <Grid.Col span={2} offset={1} className={styles.weektotal}>
-          <Stack h="100%" align="stretch" justify="space-around" gap={0} pt={1} pb={1}>
-            <Center>
-              <Text>Weektotal</Text>
-            </Center>
-            <Center>
-              <Text>{weekTotal}</Text>
-            </Center>
-          </Stack>
+        <Grid.Col span={2} offset={1} p={0}>
+          <Popover position="bottom" shadow="md">
+            <Popover.Target>
+              <Center h="100%" p={8} className={styles.action}>
+                <Stack h="100%" align="stretch" justify="space-around" gap={0} pt={1} pb={1}>
+                  <Center>
+                    <Text>Week {dayjs(date).week()}</Text>
+                  </Center>
+                  <Center>
+                    <Text>{weekTotal}</Text>
+                  </Center>
+                </Stack>
+              </Center>
+            </Popover.Target>
+            <Popover.Dropdown>
+              {Object.entries(durationWorkedInWeek).map(([projectName, duration]) => (
+                <Group key={projectName} justify="space-between" mb={4}>
+                  <Text>{projectName}</Text>
+                  <Text>{formatAsHoursAndMinutes(duration)}</Text>
+                </Group>
+              ))}
+            </Popover.Dropdown>
+          </Popover>
         </Grid.Col>
       </Grid>
     </Container>
