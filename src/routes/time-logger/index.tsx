@@ -62,8 +62,10 @@ export const TimeLogger = () => {
   });
 
   const handleSubmit = async (values: FormReturnType) => {
-    const startedAt = dayjs(values.started_at, 'HH:mm');
-    const endedAt = dayjs(values.ended_at, 'HH:mm');
+    const tmp1 = dayjs(values.started_at, 'HH:mm');
+    const startedAt = dayjs(date).set('hour', tmp1.hour()).set('minute', tmp1.minute());
+    const tmp2 = dayjs(values.ended_at, 'HH:mm');
+    const endedAt = dayjs(date).set('hour', tmp2.hour()).set('minute', tmp2.minute());
     let pausedDuration: number | undefined = undefined;
 
     if (values.paused_duration) {
