@@ -85,8 +85,6 @@ export const TimeLogger = () => {
       paused_duration: pausedDuration || null,
     };
 
-    console.log(timeEntry);
-
     try {
       await createMutation.mutateAsync(timeEntry);
       notifications.show({

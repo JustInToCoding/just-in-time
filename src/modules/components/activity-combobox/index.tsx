@@ -45,7 +45,6 @@ export const ActivityCombobox: FC<{
   );
 
   useEffect(() => {
-    console.log('onChange called');
     onChange('');
     setSearch('');
   }, [projectId]);
