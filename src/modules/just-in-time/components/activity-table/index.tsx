@@ -1,6 +1,6 @@
 import { Button, Table } from '@mantine/core';
-import { FC } from 'react';
-import { Activity } from '../../just-in-time/models/activities';
+import type { FC } from 'react';
+import type { Activity } from '../../models/activities';
 
 export const ActivityTable: FC<{
   activities: Activity[];

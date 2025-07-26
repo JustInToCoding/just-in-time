@@ -1,6 +1,6 @@
 import { Combobox, InputBase, useCombobox } from '@mantine/core';
 import { FC, useEffect, useMemo, useState } from 'react';
-import { useActivities } from '../../just-in-time/query-hooks/use-activities';
+import { useActivities } from '../../query-hooks/use-activities';
 
 export const ActivityCombobox: FC<{
   projectId?: string;

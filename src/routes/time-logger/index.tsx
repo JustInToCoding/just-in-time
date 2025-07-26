@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 import { useMemo, useState } from 'react';
 import { DayInWeekPicker } from '../../components/day-in-week-picker';
 import { TimeEntryTable } from '../../components/time-entry-table';
-import { ActivityCombobox } from '../../modules/components/activity-combobox';
+import { ActivityCombobox } from '../../modules/just-in-time/components/activity-combobox';
 import { TimeEntry } from '../../modules/moneybird/models/time-entry';
 import { useContacts } from '../../modules/moneybird/query-hooks/use-contacts';
 import { useProjects } from '../../modules/moneybird/query-hooks/use-projects';

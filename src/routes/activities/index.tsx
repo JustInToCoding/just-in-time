@@ -4,7 +4,7 @@ import { Button, Grid, Select, Stack, Text, TextInput } from '@mantine/core';
 import { isNotEmpty, useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { useCallback, useState } from 'react';
-import { ActivityTable } from '../../modules/components/activity-table';
+import { ActivityTable } from '../../modules/just-in-time/components/activity-table';
 import { useActivities } from '../../modules/just-in-time/query-hooks/use-activities';
 import { useProjects } from '../../modules/moneybird/query-hooks/use-projects';
 
