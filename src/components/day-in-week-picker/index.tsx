@@ -35,8 +35,8 @@ export const DayInWeekPicker: FC<
       6: plugin.Duration;
     };
     durationWorkedInWeek: Record<string, plugin.Duration>;
-    date: Date;
-    onChange: (date: Date) => void;
+    date: string;
+    onChange: (date: string) => void;
   } & Omit<ContainerProps, 'onChange'>
 > = ({ durationWorkedInWeekdays, durationWorkedInWeek, date, onChange = () => {}, ...rest }) => {
   const startOfWeek = useMemo(() => dayjs(date).startOf('week'), [date]);
@@ -52,7 +52,7 @@ export const DayInWeekPicker: FC<
 
   return (
     <Container pl={8} pr={8} fluid {...rest}>
-      <Grid columns={24} gutter="md">
+      <Grid columns={24} gap="md">
         <Grid.Col span="auto">
           <Title order={2}>{dayjs(date).format('D MMMM YYYY')}</Title>
         </Grid.Col>
@@ -72,7 +72,7 @@ export const DayInWeekPicker: FC<
             w="100%"
             h="100%"
             p={8}
-            onClick={() => onChange(dayjs().toDate())}
+            onClick={() => onChange(dayjs().toISOString())}
             className={styles.action}
           >
             Today
@@ -81,7 +81,7 @@ export const DayInWeekPicker: FC<
       </Grid>
       <Grid columns={24} mt="lg">
         <Grid.Col span={1} p={0} className={styles.prevweek}>
-          <Center h="100%" onClick={() => onChange(dayjs(date).subtract(1, 'week').toDate())}>
+          <Center h="100%" onClick={() => onChange(dayjs(date).subtract(1, 'week').toISOString())}>
             <FontAwesomeIcon icon={faAngleDoubleLeft} />
           </Center>
         </Grid.Col>
@@ -99,7 +99,7 @@ export const DayInWeekPicker: FC<
                 align="stretch"
                 justify="space-around"
                 gap={0}
-                onClick={() => onChange(day.toDate())}
+                onClick={() => onChange(day.toISOString())}
                 pt={1}
                 pb={1}
               >
@@ -114,7 +114,7 @@ export const DayInWeekPicker: FC<
           );
         })}
         <Grid.Col span={1} p={0} className={styles.nextweek}>
-          <Center h="100%" onClick={() => onChange(dayjs(date).add(1, 'week').toDate())}>
+          <Center h="100%" onClick={() => onChange(dayjs(date).add(1, 'week').toISOString())}>
             <FontAwesomeIcon icon={faAngleDoubleRight} />
           </Center>
         </Grid.Col>

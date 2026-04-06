@@ -14,7 +14,7 @@ import { useContacts } from '../../modules/moneybird/query-hooks/use-contacts';
 import { useProjects } from '../../modules/moneybird/query-hooks/use-projects';
 import { useTimeEntries } from '../../modules/moneybird/query-hooks/use-time-entries';
 
-const filterByDate = (data: TimeEntry[], date: Date) => {
+const filterByDate = (data: TimeEntry[], date: string) => {
   return data.filter((entry) => {
     const entryDate = dayjs(entry.started_at).startOf('day');
     return entryDate.isSame(dayjs(date).startOf('day'));
@@ -35,7 +35,7 @@ export const TimeLogger = () => {
   const { query: projectsQuery } = useProjects('state:all');
   const { query: contactsQuery } = useContacts();
 
-  const [date, setDate] = useState<Date>(dayjs().toDate());
+  const [date, setDate] = useState<string>(dayjs().toISOString());
   const period = [dayjs(date).startOf('week').toDate(), dayjs(date).endOf('week').toDate()];
   const { query, createMutation } = useTimeEntries({
     filter: `state:all,period:${dayjs(period[0]).format('YYYYMMDD')}..${dayjs(period[1]).format('YYYYMMDD')}`,
@@ -266,3 +266,4 @@ export const TimeLogger = () => {
     </Box>
   );
 };
+

@@ -14,15 +14,15 @@ import dayjs from 'dayjs';
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTimeEntries } from '../../modules/moneybird/query-hooks/use-time-entries';
 
-const startOfWeek = (date: Date) => {
+const startOfWeek = (date: string) => {
   return dayjs(date).startOf('week').subtract(1, 'day').toDate();
 };
 
-const endOfWeek = (date: Date) => {
+const endOfWeek = (date: string) => {
   return dayjs(date).endOf('week').toDate();
 };
 
-const isInWeekRange = (date: Date, value: Date | null) => {
+const isInWeekRange = (date: string, value: string | null) => {
   return value
     ? dayjs(date).isBefore(endOfWeek(value)) && dayjs(date).isAfter(startOfWeek(value))
     : false;
@@ -35,14 +35,14 @@ const getDuration = (startedAt: string, endedAt: string, pausedDuration: number 
 };
 
 export const WeekPicker: FC<
-  { value: Date; onChange: (value: Date) => void } & Omit<
+  { value: string; onChange: (value: string) => void } & Omit<
     PolymorphicComponentProps<'button', ButtonProps>,
     'value' | 'onChange'
   >
 > = ({ value, onChange, ...buttonProps }) => {
-  const [hovered, setHovered] = useState<Date | null>(null);
+  const [hovered, setHovered] = useState<string | null>(null);
   const [opened, setOpened] = useState(false);
-  const [dateForPeriod, setDateForPeriod] = useState<Date>(value);
+  const [dateForPeriod, setDateForPeriod] = useState<string>(value);
   const period = useMemo(
     () =>
       `${dayjs(dateForPeriod).startOf('month').subtract(6, 'days').format('YYYYMMDD')}..${dayjs(dateForPeriod).endOf('month').add(6, 'days').format('YYYYMMDD')}`,
@@ -72,7 +72,7 @@ export const WeekPicker: FC<
   );
 
   const handlePickWeek = useCallback(
-    (date: Date) => {
+    (date: string) => {
       onChange(date);
       setOpened(false);
       setHovered(null);
@@ -94,21 +94,23 @@ export const WeekPicker: FC<
           withCellSpacing={false}
           highlightToday
           defaultDate={value}
-          getDayProps={(date) => {
-            const isHovered = isInWeekRange(date, hovered);
-            const isSelected = isInWeekRange(date, value);
+          getDayProps={(dateString) => {
+            const date = dayjs(dateString).toDate();
+            const isHovered = isInWeekRange(dateString, hovered);
+            const isSelected = isInWeekRange(dateString, value);
             const isInRange = isHovered || isSelected;
             return {
-              onMouseEnter: () => setHovered(date),
+              onMouseEnter: () => setHovered(dateString),
               onMouseLeave: () => setHovered(null),
               inRange: isInRange,
               firstInRange: isInRange && date.getDay() === 1,
               lastInRange: isInRange && date.getDay() === 0,
               selected: isSelected,
-              onClick: () => handlePickWeek(date),
+              onClick: () => handlePickWeek(dateString),
             };
           }}
-          renderDay={(date) => {
+          renderDay={(dateString) => {
+            const date = dayjs(dateString).toDate();
             const day = date.getDate();
             const hours = getTimeEntryDurationForDate(date)?.asHours();
             return hours ? (
