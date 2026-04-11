@@ -1,11 +1,11 @@
-import { faCheck, faClock, faClose } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faClock, faClose, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Checkbox, Grid, Modal, Select, Stack } from '@mantine/core';
+import { Button, Checkbox, Grid, Group, Modal, Select, Stack } from '@mantine/core';
 import { TimeInput } from '@mantine/dates';
 import { isNotEmpty, useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import dayjs from 'dayjs';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { ActivityCombobox } from '../../modules/just-in-time/components/activity-combobox';
 import { useActivities } from '../../modules/just-in-time/query-hooks/use-activities';
 import { TimeEntry } from '../../modules/moneybird/models/time-entry';
@@ -34,7 +34,8 @@ export const EditTimeEntryModal: FC<{
 }> = ({ timeEntry, onClose }) => {
   const { query: projectsQuery } = useProjects('state:all');
   const { query: contactsQuery } = useContacts();
-  const { updateMutation } = useTimeEntries({ enabled: false });
+  const { updateMutation, deleteMutation } = useTimeEntries({ enabled: false });
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const { query: activitiesQuery, mutation: activitiesMutation } = useActivities({
     projectId: timeEntry?.project_id || undefined,
   });
@@ -84,6 +85,28 @@ export const EditTimeEntryModal: FC<{
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeEntry]);
+
+  const handleDelete = async () => {
+    if (!timeEntry) return;
+    try {
+      await deleteMutation.mutateAsync(timeEntry.id);
+      notifications.show({
+        color: 'green',
+        title: 'Deleted',
+        message: 'Time entry deleted successfully',
+        icon: <FontAwesomeIcon icon={faCheck} />,
+      });
+      setConfirmDelete(false);
+      onClose();
+    } catch (error) {
+      notifications.show({
+        color: 'red',
+        title: 'Error deleting time entry',
+        message: JSON.stringify(error),
+        icon: <FontAwesomeIcon icon={faClose} />,
+      });
+    }
+  };
 
   const handleSubmit = async (values: FormValues) => {
     if (!timeEntry) return;
@@ -217,6 +240,37 @@ export const EditTimeEntryModal: FC<{
             </Stack>
           </Grid.Col>
         </Grid>
+        <Group justify="flex-end" mt="md">
+          {confirmDelete ? (
+            <Group gap="xs">
+              <Button
+                variant="subtle"
+                color="gray"
+                onClick={() => setConfirmDelete(false)}
+                disabled={deleteMutation.isPending}
+              >
+                Cancel
+              </Button>
+              <Button
+                color="red"
+                loading={deleteMutation.isPending}
+                onClick={handleDelete}
+                leftSection={<FontAwesomeIcon icon={faTrash} />}
+              >
+                Confirm delete
+              </Button>
+            </Group>
+          ) : (
+            <Button
+              variant="subtle"
+              color="red"
+              onClick={() => setConfirmDelete(true)}
+              leftSection={<FontAwesomeIcon icon={faTrash} />}
+            >
+              Delete
+            </Button>
+          )}
+        </Group>
       </form>
     </Modal>
   );

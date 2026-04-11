@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useContext } from 'react';
-import { getTimeEntries, patchTimeEntry, postTimeEntry } from '../adapters/time-entry';
+import { deleteTimeEntry, getTimeEntries, patchTimeEntry, postTimeEntry } from '../adapters/time-entry';
 import { APISettingsContext } from '../context/api-settings-context';
 import { useAuth } from '../hooks/use-auth';
 import { TimeEntry } from '../models/time-entry';
@@ -81,9 +81,17 @@ export const useTimeEntries = ({
     },
   });
 
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => deleteTimeEntry(fetcher, id),
+    onSuccess: async () => {
+      await query2.refetch();
+    },
+  });
+
   return {
     query: query2,
     createMutation,
     updateMutation,
+    deleteMutation,
   };
 };

@@ -46,6 +46,15 @@ export const postTimeEntry = (
   }).then((response) => response.json());
 };
 
+export const deleteTimeEntry = (
+  fetcher: (input: string, useAdministration: boolean, ...args: any[]) => Promise<Response>,
+  id: string,
+): Promise<void> => {
+  return fetcher(`time_entries/${id}`, true, {
+    method: 'DELETE',
+  }).then(() => undefined);
+};
+
 export const patchTimeEntry = (
   fetcher: (input: string, useAdministration: boolean, ...args: any[]) => Promise<Response>,
   id: string,
