@@ -1,4 +1,6 @@
-import { Badge, Pagination, Table } from '@mantine/core';
+import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ActionIcon, Badge, Pagination, Table } from '@mantine/core';
 import dayjs from 'dayjs';
 import { FC, useMemo, useState } from 'react';
 import { TimeEntry } from '../../modules/moneybird/models/time-entry';
@@ -24,12 +26,14 @@ export const TimeEntryTable: FC<{
   hideProject?: boolean;
   hideContact?: boolean;
   hideDate?: boolean;
+  onEdit?: (entry: TimeEntry) => void;
 }> = ({
   timeEntries = [],
   perPage = 15,
   hideProject = false,
   hideContact = false,
   hideDate = false,
+  onEdit,
 }) => {
   const [activePage, setPage] = useState(1);
   const data = useMemo(() => chunk(timeEntries, perPage), [timeEntries, perPage]);
@@ -52,6 +56,7 @@ export const TimeEntryTable: FC<{
             <Table.Th>Worked</Table.Th>
             <Table.Th>User</Table.Th>
             <Table.Th>Status</Table.Th>
+            {onEdit && <Table.Th />}
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
@@ -85,6 +90,13 @@ export const TimeEntryTable: FC<{
                   timeEntry.billable && <Badge color="orange">Billable</Badge>
                 )}
               </Table.Td>
+              {onEdit && (
+                <Table.Td>
+                  <ActionIcon variant="subtle" onClick={() => onEdit(timeEntry)}>
+                    <FontAwesomeIcon icon={faPenToSquare} />
+                  </ActionIcon>
+                </Table.Td>
+              )}
             </Table.Tr>
           ))}
         </Table.Tbody>
