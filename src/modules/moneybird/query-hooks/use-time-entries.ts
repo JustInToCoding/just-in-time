@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useContext } from 'react';
-import { getTimeEntries, postTimeEntry } from '../adapters/time-entry';
+import { getTimeEntries, patchTimeEntry, postTimeEntry } from '../adapters/time-entry';
 import { APISettingsContext } from '../context/api-settings-context';
 import { useAuth } from '../hooks/use-auth';
 import { TimeEntry } from '../models/time-entry';
@@ -50,7 +50,33 @@ export const useTimeEntries = ({
         ? postTimeEntry(fetcher, { ...timeEntry, user_id: user })
         : Promise.reject(new Error('User is not set')),
     onSuccess: async () => {
-      // Invalidate queries that depend on the time entry data
+      await query2.refetch();
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: ({
+      id,
+      timeEntry,
+    }: {
+      id: string;
+      timeEntry: Partial<
+        Omit<
+          TimeEntry,
+          | 'user'
+          | 'project'
+          | 'events'
+          | 'notes'
+          | 'created_at'
+          | 'updated_at'
+          | 'id'
+          | 'administration_id'
+          | 'contact'
+          | 'detail'
+        >
+      >;
+    }) => patchTimeEntry(fetcher, id, timeEntry),
+    onSuccess: async () => {
       await query2.refetch();
     },
   });
@@ -58,5 +84,6 @@ export const useTimeEntries = ({
   return {
     query: query2,
     createMutation,
+    updateMutation,
   };
 };
