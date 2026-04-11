@@ -1,6 +1,6 @@
 # Just-In-Time
 
-A React time tracking app integrated with the Moneybird accounting API.
+A React time tracking app integrated with the Moneybird accounting API. Moneybird API documentation can be found here: https://developer.moneybird.com.
 
 ## Tech Stack
 
