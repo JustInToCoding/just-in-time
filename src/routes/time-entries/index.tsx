@@ -1,14 +1,19 @@
-import { Select } from '@mantine/core';
+import { faRefresh } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ActionIcon, Select } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import dayjs from 'dayjs';
 import { useState } from 'react';
+import { EditTimeEntryModal } from '../../components/edit-time-entry-modal';
 import { TimeEntryTable } from '../../components/time-entry-table';
+import { TimeEntry } from '../../modules/moneybird/models/time-entry';
 import { useProjects } from '../../modules/moneybird/query-hooks/use-projects';
 import { useTimeEntries } from '../../modules/moneybird/query-hooks/use-time-entries';
 
 export const TimeEntries = () => {
   const [state, setState] = useState<string | null>('all');
   const [projectId, setProjectId] = useState<string | null>(null);
+  const [selectedEntry, setSelectedEntry] = useState<TimeEntry | null>(null);
   const { query: projectsQuery } = useProjects('state:all');
 
   const [period, setPeriod] = useState<[Date | null, Date | null]>([
@@ -57,13 +62,23 @@ export const TimeEntries = () => {
         clearable
         mt="xs"
       />
+      <ActionIcon
+        variant="subtle"
+        mt="xs"
+        onClick={() => query.refetch()}
+        loading={query.isFetching}
+        aria-label="Refresh"
+      >
+        <FontAwesomeIcon icon={faRefresh} />
+      </ActionIcon>
       {query.isPending ? (
         <span>Loading...</span>
       ) : query.isError ? (
         <span>Error: {query.error.message}</span>
       ) : (
-        <TimeEntryTable timeEntries={query.data} />
+        <TimeEntryTable timeEntries={query.data} onEdit={setSelectedEntry} />
       )}
+      <EditTimeEntryModal timeEntry={selectedEntry} onClose={() => setSelectedEntry(null)} />
     </div>
   );
 };
