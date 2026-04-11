@@ -24,6 +24,29 @@ export const getTimeEntries = (
   ).then((response) => response.json());
 };
 
+const PER_PAGE = 100;
+
+export const getAllTimeEntries = async (
+  fetcher: (input: string, useAdministration: boolean, ...args: any[]) => Promise<Response>,
+  params?: { filter?: string; query?: string },
+): Promise<TimeEntry[]> => {
+  const all: TimeEntry[] = [];
+  let page = 1;
+
+  while (true) {
+    const results = await getTimeEntries(fetcher, {
+      ...params,
+      per_page: String(PER_PAGE),
+      page: String(page),
+    });
+    all.push(...results);
+    if (results.length < PER_PAGE) break;
+    page++;
+  }
+
+  return all;
+};
+
 export const postTimeEntry = (
   fetcher: (input: string, useAdministration: boolean, ...args: any[]) => Promise<Response>,
   timeEntry: Omit<

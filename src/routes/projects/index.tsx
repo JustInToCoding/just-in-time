@@ -1,12 +1,19 @@
 import { Group, Progress, Table, Text } from '@mantine/core';
+import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { useMemo } from 'react';
+import { getAllTimeEntries } from '../../modules/moneybird/adapters/time-entry';
+import { useAuth } from '../../modules/moneybird/hooks/use-auth';
 import { useProjects } from '../../modules/moneybird/query-hooks/use-projects';
-import { useTimeEntries } from '../../modules/moneybird/query-hooks/use-time-entries';
 
 export const Projects = () => {
+  const { fetcher } = useAuth();
   const { query } = useProjects('state:all');
-  const { query: timeEntriesQuery } = useTimeEntries({ filter: 'state:all', enabled: !!query.data });
+  const timeEntriesQuery = useQuery({
+    queryKey: ['time-entries-all'],
+    queryFn: () => getAllTimeEntries(fetcher, { filter: 'state:all' }),
+    enabled: !!query.data,
+  });
 
   const hoursPerProject = useMemo(() => {
     if (!timeEntriesQuery.data) return {} as Record<string, number>;
