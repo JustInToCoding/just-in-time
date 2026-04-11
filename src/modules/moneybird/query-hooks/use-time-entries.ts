@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useContext } from 'react';
 import { deleteTimeEntry, getTimeEntries, patchTimeEntry, postTimeEntry } from '../adapters/time-entry';
 import { APISettingsContext } from '../context/api-settings-context';
@@ -20,6 +20,7 @@ export const useTimeEntries = ({
 }) => {
   const { fetcher } = useAuth();
   const { user } = useContext(APISettingsContext);
+  const queryClient = useQueryClient();
 
   // Queries
   const query2 = useQuery({
@@ -50,7 +51,7 @@ export const useTimeEntries = ({
         ? postTimeEntry(fetcher, { ...timeEntry, user_id: user })
         : Promise.reject(new Error('User is not set')),
     onSuccess: async () => {
-      await query2.refetch();
+      await queryClient.invalidateQueries({ queryKey: ['time-entries'] });
     },
   });
 
@@ -77,14 +78,14 @@ export const useTimeEntries = ({
       >;
     }) => patchTimeEntry(fetcher, id, timeEntry),
     onSuccess: async () => {
-      await query2.refetch();
+      await queryClient.invalidateQueries({ queryKey: ['time-entries'] });
     },
   });
 
   const deleteMutation = useMutation({
     mutationFn: (id: string) => deleteTimeEntry(fetcher, id),
     onSuccess: async () => {
-      await query2.refetch();
+      await queryClient.invalidateQueries({ queryKey: ['time-entries'] });
     },
   });
 
