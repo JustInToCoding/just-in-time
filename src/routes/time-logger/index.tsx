@@ -1,6 +1,6 @@
-import { faCheck, faClock, faClose } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faClock, faClose, faRefresh } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box, Button, Card, Checkbox, Grid, Paper, Select, Stack } from '@mantine/core';
+import { ActionIcon, Box, Button, Card, Checkbox, Grid, Paper, Select, Stack } from '@mantine/core';
 import { TimeInput } from '@mantine/dates';
 import { isNotEmpty, useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
@@ -8,6 +8,7 @@ import dayjs from 'dayjs';
 import { useMemo, useState } from 'react';
 import { DayInWeekPicker } from '../../components/day-in-week-picker';
 import { TimeEntryTable } from '../../components/time-entry-table';
+import { EditTimeEntryModal } from '../../components/edit-time-entry-modal';
 import { ActivityCombobox } from '../../modules/just-in-time/components/activity-combobox';
 import { TimeEntry } from '../../modules/moneybird/models/time-entry';
 import { useContacts } from '../../modules/moneybird/query-hooks/use-contacts';
@@ -36,6 +37,7 @@ export const TimeLogger = () => {
   const { query: contactsQuery } = useContacts();
 
   const [date, setDate] = useState<string>(dayjs().toISOString());
+  const [selectedEntry, setSelectedEntry] = useState<TimeEntry | null>(null);
   const period = [dayjs(date).startOf('week').toDate(), dayjs(date).endOf('week').toDate()];
   const { query, createMutation } = useTimeEntries({
     filter: `state:all,period:${dayjs(period[0]).format('YYYYMMDD')}..${dayjs(period[1]).format('YYYYMMDD')}`,
@@ -250,6 +252,18 @@ export const TimeLogger = () => {
                 <Button type="submit">Submit</Button>
               </Stack>
             </Grid.Col>
+            <Grid.Col span="content">
+              <Stack justify="flex-end" align="center" h="100%">
+                <ActionIcon
+                  variant="subtle"
+                  onClick={() => query.refetch()}
+                  loading={query.isFetching}
+                  aria-label="Refresh"
+                >
+                  <FontAwesomeIcon icon={faRefresh} />
+                </ActionIcon>
+              </Stack>
+            </Grid.Col>
           </Grid>
         </form>
       </Card>
@@ -260,9 +274,10 @@ export const TimeLogger = () => {
         ) : query.isError ? (
           <span>Error: {query.error.message}</span>
         ) : (
-          <TimeEntryTable timeEntries={timeEntriesForDate} hideDate />
+          <TimeEntryTable timeEntries={timeEntriesForDate} hideDate onEdit={setSelectedEntry} />
         )}
       </Paper>
+      <EditTimeEntryModal timeEntry={selectedEntry} onClose={() => setSelectedEntry(null)} />
     </Box>
   );
 };
