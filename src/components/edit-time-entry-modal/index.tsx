@@ -117,7 +117,7 @@ export const EditTimeEntryModal: FC<{
     const tmp2 = dayjs(values.ended_at, 'HH:mm');
     const endedAt = dayjs(date).set('hour', tmp2.hour()).set('minute', tmp2.minute());
 
-    let pausedDuration: number | null = null;
+    let pausedDuration: number = 0;
     if (values.paused_duration && values.paused_duration !== '00:00') {
       const [hours, minutes] = values.paused_duration.split(':').map(Number);
       pausedDuration = dayjs.duration({ hours, minutes }).asSeconds();
