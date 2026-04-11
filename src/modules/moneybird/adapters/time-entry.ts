@@ -45,3 +45,28 @@ export const postTimeEntry = (
     body: JSON.stringify({ time_entry: timeEntry }),
   }).then((response) => response.json());
 };
+
+export const patchTimeEntry = (
+  fetcher: (input: string, useAdministration: boolean, ...args: any[]) => Promise<Response>,
+  id: string,
+  timeEntry: Partial<
+    Omit<
+      TimeEntry,
+      | 'user'
+      | 'project'
+      | 'events'
+      | 'notes'
+      | 'created_at'
+      | 'updated_at'
+      | 'id'
+      | 'administration_id'
+      | 'contact'
+      | 'detail'
+    >
+  >,
+): Promise<TimeEntry> => {
+  return fetcher(`time_entries/${id}`, true, {
+    method: 'PATCH',
+    body: JSON.stringify({ time_entry: timeEntry }),
+  }).then((response) => response.json());
+};
