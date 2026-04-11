@@ -7,6 +7,7 @@ import { notifications } from '@mantine/notifications';
 import dayjs from 'dayjs';
 import { FC, useEffect } from 'react';
 import { ActivityCombobox } from '../../modules/just-in-time/components/activity-combobox';
+import { useActivities } from '../../modules/just-in-time/query-hooks/use-activities';
 import { TimeEntry } from '../../modules/moneybird/models/time-entry';
 import { useContacts } from '../../modules/moneybird/query-hooks/use-contacts';
 import { useProjects } from '../../modules/moneybird/query-hooks/use-projects';
@@ -34,6 +35,9 @@ export const EditTimeEntryModal: FC<{
   const { query: projectsQuery } = useProjects('state:all');
   const { query: contactsQuery } = useContacts();
   const { updateMutation } = useTimeEntries({ enabled: false });
+  const { query: activitiesQuery, mutation: activitiesMutation } = useActivities({
+    projectId: timeEntry?.project_id || undefined,
+  });
 
   const form = useForm<FormValues>({
     mode: 'controlled',
@@ -53,6 +57,18 @@ export const EditTimeEntryModal: FC<{
       description: isNotEmpty('Description must be filled in'),
     },
   });
+
+  useEffect(() => {
+    if (
+      timeEntry?.description &&
+      timeEntry.project_id &&
+      activitiesQuery.data &&
+      !activitiesQuery.data.includes(timeEntry.description)
+    ) {
+      activitiesMutation.mutate([...activitiesQuery.data, timeEntry.description]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timeEntry, activitiesQuery.data]);
 
   useEffect(() => {
     if (timeEntry) {
@@ -115,7 +131,7 @@ export const EditTimeEntryModal: FC<{
   };
 
   return (
-    <Modal opened={!!timeEntry} onClose={onClose} title="Edit time entry" size="xl">
+    <Modal opened={!!timeEntry} onClose={onClose} title="Edit time entry" size="90%">
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <Grid columns={24}>
           <Grid.Col span="auto">
@@ -179,6 +195,7 @@ export const EditTimeEntryModal: FC<{
                 label="Description"
                 projectId={form.getInputProps('project_id').value}
                 key={form.key('description')}
+                resetOnProjectChange={false}
                 {...form.getInputProps('description')}
               />
             </Stack>

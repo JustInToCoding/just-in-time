@@ -11,6 +11,7 @@ export const ActivityCombobox: FC<{
   error?: string;
   onFocus?: (event: React.FocusEvent<HTMLInputElement, Element>) => void;
   onBlur?: (event: React.FocusEvent<HTMLInputElement, Element>) => void;
+  resetOnProjectChange?: boolean;
 }> = ({
   projectId,
   label,
@@ -20,6 +21,7 @@ export const ActivityCombobox: FC<{
   error,
   onFocus = () => {},
   onBlur = () => {},
+  resetOnProjectChange = true,
 }) => {
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
@@ -45,9 +47,15 @@ export const ActivityCombobox: FC<{
   );
 
   useEffect(() => {
-    onChange('');
+    if (resetOnProjectChange) {
+      onChange('');
+    }
     setSearch('');
   }, [projectId]);
+
+  useEffect(() => {
+    setSearch(value || '');
+  }, [value]);
 
   return (
     <Combobox
