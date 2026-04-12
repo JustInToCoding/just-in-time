@@ -1,4 +1,6 @@
-import { Group, Progress, Table, Text } from '@mantine/core';
+import { faRefresh } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ActionIcon, Group, Progress, Table, Text } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { useMemo } from 'react';
@@ -40,6 +42,18 @@ export const Projects = () => {
 
   return (
     <div>
+      <ActionIcon
+        variant="subtle"
+        mb="xs"
+        onClick={() => {
+          query.refetch();
+          timeEntriesQuery.refetch();
+        }}
+        loading={query.isFetching || timeEntriesQuery.isFetching}
+        aria-label="Refresh"
+      >
+        <FontAwesomeIcon icon={faRefresh} />
+      </ActionIcon>
       <Table highlightOnHover striped>
         <Table.Thead>
           <Table.Tr>
