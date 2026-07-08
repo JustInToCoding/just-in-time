@@ -1,7 +1,7 @@
 import { faRefresh } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ActionIcon, Select } from '@mantine/core';
-import { DatePickerInput } from '@mantine/dates';
+import { DatePickerInput, DatesRangeValue, DateValue } from '@mantine/dates';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 import { EditTimeEntryModal } from '../../components/edit-time-entry-modal';
@@ -16,7 +16,7 @@ export const TimeEntries = () => {
   const [selectedEntry, setSelectedEntry] = useState<TimeEntry | null>(null);
   const { query: projectsQuery } = useProjects('state:all');
 
-  const [period, setPeriod] = useState<[Date | null, Date | null]>([
+  const [period, setPeriod] = useState<DatesRangeValue<DateValue>>([
     dayjs().startOf('month').toDate(),
     dayjs().endOf('month').toDate(),
   ]);
@@ -82,3 +82,4 @@ export const TimeEntries = () => {
     </div>
   );
 };
+
